@@ -1,0 +1,19 @@
+{
+	"name": "evis-bregu/robo-test",
+	"description": "Test Robo Extra Tasks Creation",
+	"homepage": "https://github.com/visi27/test",
+	"keywords": ["robo", "tasks"],
+	"license": "MIT",
+	"autoload":
+	{
+		"psr-4":
+		{
+			"Evis\\Robo\\": "src"
+		}
+	},
+	"require-dev":
+	{
+		"codegyre/robo": "0.7.2"
+
+	}
+}
