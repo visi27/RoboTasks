@@ -48,7 +48,7 @@ class CreateLiveTableTask extends BaseTask
 	{
 		// Login to the db
 		$this->printTaskInfo('Connecting to db server - <info>mysql://'.$this->user.':'.$this->pass.'@'.$this->host.'</info>');
-		$db = new mysqli($this->host, $this->user, $this->pass);
+		$db = new mysqli($this->host, $this->user, $this->pass, $this->db);
 		if ($db->connect_errno)
 		{
 			throw new RuntimeException
