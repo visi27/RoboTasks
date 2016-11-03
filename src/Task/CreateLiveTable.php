@@ -1,64 +1,69 @@
-<?php namespace Evis\Robo\Task;
+<?php
+
+namespace Evis\Robo\Task;
 
 use mysqli;
-use RuntimeException;
 use Robo\Result;
 use Robo\Task\BaseTask;
 use Robo\Common\DynamicParams;
 
 trait CreateLiveTable
 {
-	protected function taskCreateLiveTable()
-	{
-		return new CreateLiveTableTask();
-	}
+
+    protected function taskCreateLiveTable()
+    {
+        return new CreateLiveTableTask();
+    }
 }
+
 class CreateLiveTableTask extends BaseTask
 {
-	use DynamicParams;
-	/** @var string */
-	private $host = 'localhost';
-	/** @var string */
-	private $user = 'root';
-	/** @var string */
-	private $pass = '';
-	/** @var string */
-	private $db = 'db';
-	/** @var string */
-	private $name;
-	/** @var boolean */
-	private $dropTables = false;
-	/**
-	 * Executes the CreateLiveTableTask Task.
-	 *
-	 * Example usage:
-	 * ```php
-	 * $this->taskCreateLiveTable()
-	 * 		->host('my.db.host')
-	 * 		->user('my_db_user')
-	 * 		->pass('P@ssw0rd')
-	 *      ->db('db')
-	 * 		->name('the_table_to_create')
-	 * ->run();
-	 * ```
-	 *
-	 * @return Robo\Result
-	 */
-	public function run()
-	{
-		// Login to the db
-		$this->printTaskInfo('Connecting to db server - <info>mysql://'.$this->user.':'.$this->pass.'@'.$this->host.'</info>');
-		$db = new mysqli($this->host, $this->user, $this->pass, $this->db);
-		if ($db->connect_errno)
-		{
-			throw new RuntimeException
-			(
-				'Failed to connect to MySQL: ('.$db->connect_errno.') '.
-				$db->connect_error
-			);
-		}
-		// Create the table
-		$query = "CREATE TABLE IF NOT EXISTS `".$this->name."` (
+    use DynamicParams;
+
+    /** @var string */
+    private $host = 'localhost';
+
+    /** @var string */
+    private $user = 'root';
+
+    /** @var string */
+    private $pass = '';
+
+    /** @var string */
+    private $db = 'db';
+
+    /** @var string */
+    private $name;
+
+    /** @var boolean */
+    private $dropTables = false;
+
+    /**
+     * Executes the CreateLiveTableTask Task.
+     *
+     * Example usage:
+     * ```php
+     * $this->taskCreateLiveTable()
+     * ->host('my.db.host')
+     * ->user('my_db_user')
+     * ->pass('P@ssw0rd')
+     * ->db('db')
+     * ->name('the_table_to_create')
+     * ->run();
+     * ```
+     *
+     * @return Robo\Result
+     */
+    public function run()
+    {
+        // Login to the db
+        $this->printTaskInfo('Connecting to db server - <info>mysql://' . $this->user . ':' . $this->pass . '@' . $this->host . '</info>');
+        $db = new mysqli($this->host, $this->user, $this->pass, $this->db);
+        if ($db->connect_errno) {
+            return Result::error($this, "Error connecting to db: " . $db->error);
+        }
+        // Create the table
+        $query = "CREATE TABLE IF NOT EXISTS `" . $this->name . "` (
                   `id` bigint(20) NOT NULL,
                   `uniqueid` varchar(100) NOT NULL,
                   `client_name` varchar(32) DEFAULT NULL,
@@ -107,18 +112,13 @@ class CreateLiveTableTask extends BaseTask
                   PRIMARY KEY (`id`,`calldate`,`rate_date`),
                   KEY `client_name_processed_surcharge_processed` (`client_name`,`processed`,`surcharge_processed`)
                 ) ENGINE=MyISAM DEFAULT CHARSET=latin1";
-		
-		$this->printTaskInfo('Running query, creating table: - <info>'.$this->name.'</info>');
-		if (!$db->query($query))
-		{
-			throw new RuntimeException
-			(
-				'Failed to create table: ('.$db->errorno.') '.
-				$db->error
-			);
-		}
-		
-		// If we get to here assume everything worked
-		return Result::success($this);
-	}
+        
+        $this->printTaskInfo('Running query, creating table: - <info>' . $this->name . '</info>');
+        if (! $db->query($query)) {
+            return Result::error($this, "Failed to create table: " . $db->error);
+        }
+        
+        // If we get to here assume everything worked
+        return Result::success($this);
+    }
 }
