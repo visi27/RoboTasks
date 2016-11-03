@@ -105,7 +105,6 @@ class CreateLiveTableTask extends BaseTask
                   KEY `client_name_processed_surcharge_processed` (`client_name`,`processed`,`surcharge_processed`)
                 ) ENGINE=MyISAM DEFAULT CHARSET=latin1";
 		
-		
 		$this->printTaskInfo('Running query, creating table: - <info>'.$this->name.'</info>');
 		if (!$db->query($query))
 		{

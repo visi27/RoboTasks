@@ -1,0 +1,12 @@
+# a comment - this is ignored
+# no .buildpath, .project, .settings/
+.buildpath
+.project
+.settings/
+# ignore all files in the vendor/ directory
+vendor/
+# ignore composer.lock
+composer.lock
+# ignore deployment files
+deployment.properties
+deployment.xml
