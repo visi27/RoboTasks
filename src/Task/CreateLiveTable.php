@@ -8,7 +8,7 @@ use Robo\Common\DynamicParams;
 
 trait CreateLiveTable
 {
-	protected function taskLiveTable()
+	protected function taskCreateLiveTable()
 	{
 		return new CreateLiveTableTask();
 	}
@@ -23,6 +23,8 @@ class CreateLiveTableTask extends BaseTask
 	/** @var string */
 	private $pass = '';
 	/** @var string */
+	private $db = 'db';
+	/** @var string */
 	private $name;
 	/** @var boolean */
 	private $dropTables = false;
@@ -31,10 +33,11 @@ class CreateLiveTableTask extends BaseTask
 	 *
 	 * Example usage:
 	 * ```php
-	 * $this->taskCreateLiveTableTask()
+	 * $this->taskCreateLiveTable()
 	 * 		->host('my.db.host')
 	 * 		->user('my_db_user')
 	 * 		->pass('P@ssw0rd')
+	 *      ->db('db')
 	 * 		->name('the_table_to_create')
 	 * ->run();
 	 * ```
